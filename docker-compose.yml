@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  task-api:
+    build: ./task-api
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount the repository of the task-api project on the host to /code inside the container, allowing to modify the code o the fly 
+      - ./task-api:/code 
+    environment:
+      # Run run `flask run` in development mode and rloade the code on change
+      FLASK_ENV: development
