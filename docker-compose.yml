@@ -1,13 +1,31 @@
 version: '3'
 
 services:
-  task-api:
-    build: ./task-api
+  api:
+    build: ./api
     ports:
       - "5000:5000"
     volumes:
-      # Mount the repository of the task-api project on the host to /code inside the container, allowing to modify the code o the fly 
-      - ./task-api:/code 
+      # Mount the repository of the api project on the host to /code inside the container, allowing to modify the code o the fly 
+      - ./api:/code 
     environment:
       # Run run `flask run` in development mode and rloade the code on change
       FLASK_ENV: development
+  ui:
+    build: ./ui
+    volumes:
+      - ./ui:/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    command: yarn start
+
+    # Allocate an interactive tty for the container process. (https://github.com/facebook/create-react-app/issues/8688)
+    # When starting manually the equivalent command is:
+      # docker run -it -p 3000:3000 ui
+    # similar to -i flag
+    stdin_open: true
+    # similar to -t flag 
+    tty: true

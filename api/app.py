@@ -1,13 +1,15 @@
 from flask import Flask, json, request, abort
+from flask_cors import CORS
 from task import Task, TaskJSONEncoder
 
 app = Flask(__name__)
+CORS(app)
 app.json_encoder = TaskJSONEncoder
 
 tasks = {
-    1: Task("Add user authentication", False),
-    2: Task("Connect database", False),
-    3: Task("Write tests ", False)
+    1: Task(1, "Add user authentication", False),
+    2: Task(2, "Connect database", False),
+    3: Task(3, "Write tests", False)
 }
 
 max_id = 3
@@ -51,7 +53,7 @@ def create_task():
 
     done = req_data['done'] if 'done' in req_data else False
     id = get_next_id()
-    tasks[id] = Task(req_data['description'], done)
+    tasks[id] = Task(id, req_data['description'], done)
     response = app.response_class(
         response=json.dumps({'id' : id}),
         status=201,
@@ -74,7 +76,7 @@ def update_task(task_id):
         max_id = task_id
 
     done = req_data['done'] if 'done' in req_data else False
-    tasks[task_id] = Task(req_data['description'], done)
+    tasks[task_id] = Task(task_id, req_data['description'], done)
     return app.response_class(
         status=204
     )
