@@ -4,20 +4,21 @@ services:
   api:
     build: ./api
     ports:
-      - "5000:5000"
+      - 5000:5000
     volumes:
       # Mount the repository of the api project on the host to /code inside the container, allowing to modify the code o the fly 
       - ./api:/code 
     environment:
       # Run run `flask run` in development mode and rloade the code on change
       FLASK_ENV: development
+
   ui:
     build: ./ui
     volumes:
       - ./ui:/app
       - /usr/src/app/node_modules
     ports:
-      - '3000:3000'
+      - 3000:3000
     depends_on:
       - api
     command: yarn start
